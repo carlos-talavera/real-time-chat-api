@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { EnvironmentVariablesValidationSchema } from 'src/shared/config/models/env-variables';
+import { DatabaseModule } from 'src/shared/datasource/database/database.module';
 
 @Module({
   imports: [
@@ -9,6 +10,7 @@ import { EnvironmentVariablesValidationSchema } from 'src/shared/config/models/e
       envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
       validationSchema: EnvironmentVariablesValidationSchema,
     }),
+    DatabaseModule,
   ],
   controllers: [],
   providers: [],
