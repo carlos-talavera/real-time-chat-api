@@ -82,7 +82,7 @@ export class UserService {
 
     await this.userModel.findByIdAndUpdate(userId, {
       refreshToken: hashedRefreshToken,
-      refreshTokenExpiresAt,
+      refreshTokenExpiresAt: hashedRefreshToken ? refreshTokenExpiresAt : null,
     });
   }
 }
