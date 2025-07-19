@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from 'src/shared/auth/auth.module';
 import { EnvironmentVariablesValidationSchema } from 'src/shared/config/models/env-variables';
 import { DatabaseModule } from 'src/shared/datasource/database/database.module';
 
@@ -11,6 +12,7 @@ import { DatabaseModule } from 'src/shared/datasource/database/database.module';
       validationSchema: EnvironmentVariablesValidationSchema,
     }),
     DatabaseModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
