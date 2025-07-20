@@ -1,12 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document } from 'mongoose';
 
 export type UserDocument = User & Document;
 
 @Schema({ timestamps: true, versionKey: false })
 export class User {
-  _id: Types.ObjectId;
-
   @Prop({ required: true, unique: true })
   username: string;
 
@@ -21,8 +19,6 @@ export class User {
 
   @Prop({ default: null })
   refreshTokenExpiresAt: number;
-
-  toObject?: () => User;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

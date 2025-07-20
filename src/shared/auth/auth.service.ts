@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/api/users/models/user.model';
+import { User, UserDocument } from 'src/api/users/models/user.model';
 import { UserService } from 'src/api/users/user.service';
 
 @Injectable()
@@ -32,7 +32,7 @@ export class AuthService {
     return result;
   }
 
-  public async login(user: User) {
+  public async login(user: UserDocument) {
     const userId = user._id.toString();
     const [accessToken, refreshToken] = await Promise.all([
       this.getAccessToken(userId, user.username),
