@@ -19,6 +19,9 @@ export class User {
 
   @Prop({ default: null })
   refreshTokenExpiresAt: number;
+
+  @Prop({ default: null })
+  socketId: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -45,6 +45,10 @@ export class UserService {
     return user.save();
   }
 
+  public async updateSocketId(userId: string, socketId: string) {
+    await this.userModel.updateOne({ _id: userId }, { socketId });
+  }
+
   public async findOne(username: string): Promise<UserDocument | undefined> {
     const user = await this.userModel.findOne({ username }).exec();
     return user || undefined;
