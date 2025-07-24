@@ -73,4 +73,22 @@ export class RoomService {
       throw new UnauthorizedException('You are not a participant in this room');
     }
   }
+
+  public async deleteRoom(id: string): Promise<void> {
+    const session = await this.roomModel.db.startSession();
+
+    try {
+      session.startTransaction();
+
+      await this.messageService.deleteRoomMessages(id, session);
+      await this.roomModel.deleteOne({ _id: id }).session(session).exec();
+
+      await session.commitTransaction();
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
+    }
+  }
 }
