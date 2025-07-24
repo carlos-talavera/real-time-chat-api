@@ -15,6 +15,52 @@ export class RoomService {
     private readonly messageService: MessageService,
   ) {}
 
+  public async findUserRooms(userId: string): Promise<RoomDocument[]> {
+    return this.roomModel.aggregate([
+      {
+        $match: { participants: new Types.ObjectId(userId) },
+      },
+      {
+        $lookup: {
+          from: 'messages',
+          localField: '_id',
+          foreignField: 'roomId',
+          as: 'messages',
+        },
+      },
+      {
+        $unwind: {
+          path: '$messages',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $sort: {
+          'messages.createdAt': -1,
+        },
+      },
+      {
+        $group: {
+          _id: '$_id',
+          roomInfo: { $first: '$$ROOT' },
+          lastMessage: { $first: '$messages' },
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: ['$roomInfo', { lastMessage: '$lastMessage' }],
+          },
+        },
+      },
+      {
+        $project: {
+          messages: 0, // Exclude the full messages array from the final output
+        },
+      },
+    ]);
+  }
+
   public async findById(id: string): Promise<RoomDocument> {
     const room = await this.roomModel.findById(id);
     if (!room) {
